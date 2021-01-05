@@ -7,17 +7,20 @@ import (
 	"time"
 )
 
+// RawRequest ...
 type RawRequest struct {
 	Timestamp int64
 	Request   []byte
 }
 
+// FileOutput ...
 type FileOutput struct {
 	path    string
 	encoder *gob.Encoder
 	file    *os.File
 }
 
+// NewFileOutput ...
 func NewFileOutput(path string) (o *FileOutput) {
 	o = new(FileOutput)
 	o.path = path
@@ -26,6 +29,7 @@ func NewFileOutput(path string) (o *FileOutput) {
 	return
 }
 
+// Init ...
 func (o *FileOutput) Init(path string) {
 	var err error
 

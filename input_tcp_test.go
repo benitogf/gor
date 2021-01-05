@@ -38,10 +38,10 @@ func TestTCPInput(t *testing.T) {
 
 	for i := 0; i < 100; i++ {
 		wg.Add(1)
-		new_buf := make([]byte, len(msg) + 2)
-		msg = append(msg,[]byte("¶")...)
-		copy(new_buf, msg)
-		conn.Write(new_buf)
+		newBuffer := make([]byte, len(msg)+2)
+		msg = append(msg, []byte("¶")...)
+		copy(newBuffer, msg)
+		conn.Write(newBuffer)
 	}
 
 	wg.Wait()
@@ -82,10 +82,10 @@ func BenchmarkTCPInput(b *testing.B) {
 			for {
 				data := <-dataChan
 
-				new_buf := make([]byte, len(data) + 2)
-				data = append(data,[]byte("¶")...)
-				copy(new_buf, data)
-				conn.Write(new_buf)
+				newBuffer := make([]byte, len(data)+2)
+				data = append(data, []byte("¶")...)
+				copy(newBuffer, data)
+				conn.Write(newBuffer)
 			}
 		}(conn)
 	}

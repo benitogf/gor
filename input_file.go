@@ -7,12 +7,14 @@ import (
 	"time"
 )
 
+// FileInput ...
 type FileInput struct {
 	data    chan []byte
 	path    string
 	decoder *gob.Decoder
 }
 
+// NewFileInput ...
 func NewFileInput(path string) (i *FileInput) {
 	i = new(FileInput)
 	i.data = make(chan []byte)
@@ -24,6 +26,7 @@ func NewFileInput(path string) (i *FileInput) {
 	return
 }
 
+// Init ...
 func (i *FileInput) Init(path string) {
 	file, err := os.Open(path)
 

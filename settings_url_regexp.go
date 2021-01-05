@@ -5,10 +5,12 @@ import (
 	"regexp"
 )
 
+// HTTPUrlRegexp ...
 type HTTPUrlRegexp struct {
 	regexp *regexp.Regexp
 }
 
+// String ...
 func (r *HTTPUrlRegexp) String() string {
 	if r.regexp == nil {
 		return ""
@@ -16,12 +18,14 @@ func (r *HTTPUrlRegexp) String() string {
 	return r.regexp.String()
 }
 
+// Set ...
 func (r *HTTPUrlRegexp) Set(value string) error {
 	regexp, err := regexp.Compile(value)
 	r.regexp = regexp
 	return err
 }
 
+// Good ...
 func (r *HTTPUrlRegexp) Good(req *http.Request) bool {
 	if r.regexp == nil {
 		return true

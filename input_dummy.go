@@ -4,10 +4,12 @@ import (
 	"time"
 )
 
+// DummyInput ...
 type DummyInput struct {
 	data chan []byte
 }
 
+// NewDummyInput ...
 func NewDummyInput(options string) (di *DummyInput) {
 	di = new(DummyInput)
 	di.data = make(chan []byte)

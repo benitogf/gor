@@ -8,9 +8,11 @@ import (
 )
 
 const (
-	VERSION = "0.8"
+	// VERSION ...
+	VERSION = "0.81"
 )
 
+// AppSettings ...
 type AppSettings struct {
 	verbose bool
 	stats   bool
@@ -37,6 +39,7 @@ type AppSettings struct {
 	outputHTTPElasticSearch     string
 }
 
+// Settings ...
 var Settings AppSettings = AppSettings{}
 
 func usage() {
@@ -74,6 +77,7 @@ func init() {
 	flag.StringVar(&Settings.outputHTTPElasticSearch, "output-http-elasticsearch", "", "Send request and response stats to ElasticSearch:\n\tgor --input-raw :8080 --output-http staging.com --output-http-elasticsearch 'es_host:api_port/index_name'")
 }
 
+// Debug ...
 func Debug(args ...interface{}) {
 	if Settings.verbose {
 		log.Println(args...)

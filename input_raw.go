@@ -1,17 +1,20 @@
 package main
 
 import (
-	raw "github.com/buger/gor/raw_socket_listener"
 	"log"
 	"net"
 	"strings"
+
+	raw "github.com/benitogf/gor/raw_socket"
 )
 
+// RAWInput ...
 type RAWInput struct {
 	data    chan []byte
 	address string
 }
 
+// NewRAWInput ...
 func NewRAWInput(address string) (i *RAWInput) {
 	i = new(RAWInput)
 	i.data = make(chan []byte)

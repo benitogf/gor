@@ -4,9 +4,11 @@ import (
 	"fmt"
 )
 
+// DummyOutput ...
 type DummyOutput struct {
 }
 
+// NewDummyOutput ...
 func NewDummyOutput(options string) (di *DummyOutput) {
 	di = new(DummyOutput)
 

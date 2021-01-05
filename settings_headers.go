@@ -6,7 +6,10 @@ import (
 	"strings"
 )
 
+// HTTPHeaders ...
 type HTTPHeaders []HTTPHeader
+
+// HTTPHeader ...
 type HTTPHeader struct {
 	Name  string
 	Value string
@@ -16,6 +19,7 @@ func (h *HTTPHeaders) String() string {
 	return fmt.Sprint(*h)
 }
 
+// Set ...
 func (h *HTTPHeaders) Set(value string) error {
 	v := strings.SplitN(value, ":", 2)
 	if len(v) != 2 {

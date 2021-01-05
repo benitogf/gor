@@ -13,16 +13,18 @@ type headerFilter struct {
 	regexp *regexp.Regexp
 }
 
+// HTTPHeaderFilters ...
 type HTTPHeaderFilters []headerFilter
 
 func (h *HTTPHeaderFilters) String() string {
 	return fmt.Sprint(*h)
 }
 
+// Set ...
 func (h *HTTPHeaderFilters) Set(value string) error {
 	valArr := strings.SplitN(value, ":", 2)
 	if len(valArr) < 2 {
-		return errors.New("need both header and value, colon-delimited (ex. user_id:^169$).")
+		return errors.New("need both header and value, colon-delimited (ex. user_id:^169$)")
 	}
 	r, err := regexp.Compile(valArr[1])
 	if err != nil {
@@ -34,6 +36,7 @@ func (h *HTTPHeaderFilters) Set(value string) error {
 	return nil
 }
 
+// Good ...
 func (h *HTTPHeaderFilters) Good(req *http.Request) bool {
 	for _, f := range *h {
 		if !f.regexp.MatchString(req.Header.Get(f.name)) {

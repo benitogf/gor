@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// RedirectNotAllowed ...
 type RedirectNotAllowed struct{}
 
 func (e *RedirectNotAllowed) Error() string {
@@ -35,6 +36,7 @@ func ParseRequest(data []byte) (request *http.Request, err error) {
 	return
 }
 
+// HTTPOutput ...
 type HTTPOutput struct {
 	address string
 	limit   int
@@ -51,6 +53,7 @@ type HTTPOutput struct {
 	bufStats *GorStat
 }
 
+// NewHTTPOutput ...
 func NewHTTPOutput(options string, headers HTTPHeaders, methods HTTPMethods, urlRegexp HTTPUrlRegexp, headerFilters HTTPHeaderFilters, headerHashFilters HTTPHeaderHashFilters) io.Writer {
 	o := new(HTTPOutput)
 
@@ -82,9 +85,9 @@ func NewHTTPOutput(options string, headers HTTPHeaders, methods HTTPMethods, url
 
 	if o.limit > 0 {
 		return NewLimiter(o, o.limit)
-	} else {
-		return o
 	}
+
+	return o
 }
 
 func (o *HTTPOutput) worker(n int) {
@@ -151,6 +154,7 @@ func (o *HTTPOutput) sendRequest(client *http.Client, data []byte) {
 
 }
 
+// SetHeader ...
 func SetHeader(request *http.Request, name string, value string) {
 
 	// Need to check here for the Host header as it needs to be set on the request and not as a separate header

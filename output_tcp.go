@@ -9,13 +9,15 @@ import (
 	"strings"
 )
 
+// TCPOutput ...
 type TCPOutput struct {
-	address string
-	limit   int
-	buf     chan []byte
+	address  string
+	limit    int
+	buf      chan []byte
 	bufStats *GorStat
 }
 
+// NewTCPOutput ...
 func NewTCPOutput(options string) io.Writer {
 	o := new(TCPOutput)
 
@@ -35,9 +37,9 @@ func NewTCPOutput(options string) io.Writer {
 
 	if o.limit > 0 {
 		return NewLimiter(o, o.limit)
-	} else {
-		return o
 	}
+
+	return o
 }
 
 func (o *TCPOutput) worker() {
@@ -49,11 +51,12 @@ func (o *TCPOutput) worker() {
 	}
 }
 
+// Write ...
 func (o *TCPOutput) Write(data []byte) (n int, err error) {
-	new_buf := make([]byte, len(data) + 2)
-	data = append(data,[]byte("¶")...)
-	copy(new_buf, data)
-	o.buf <- new_buf
+	newBuf := make([]byte, len(data)+2)
+	data = append(data, []byte("¶")...)
+	copy(newBuf, data)
+	o.buf <- newBuf
 	o.bufStats.Write(len(o.buf))
 
 	return len(data), nil

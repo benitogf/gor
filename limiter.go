@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// Limiter ...
 type Limiter struct {
 	writer io.Writer
 	limit  int
@@ -14,6 +15,7 @@ type Limiter struct {
 	currentTime int64
 }
 
+// NewLimiter ...
 func NewLimiter(writer io.Writer, limit int) (l *Limiter) {
 	l = new(Limiter)
 	l.limit = limit

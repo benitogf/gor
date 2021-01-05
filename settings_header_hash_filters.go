@@ -14,21 +14,23 @@ type headerHashFilter struct {
 	maxHash uint32
 }
 
+// HTTPHeaderHashFilters ...
 type HTTPHeaderHashFilters []headerHashFilter
 
 func (h *HTTPHeaderHashFilters) String() string {
 	return fmt.Sprint(*h)
 }
 
+// Set ...
 func (h *HTTPHeaderHashFilters) Set(value string) error {
 	valArr := strings.SplitN(value, ":", 2)
 	if len(valArr) < 2 {
-		return errors.New("need both header and value, colon-delimited (ex. user_id:1/2).")
+		return errors.New("need both header and value, colon-delimited (ex. user_id:1/2)")
 	}
 
 	fracArr := strings.Split(valArr[1], "/")
 	if len(fracArr) < 2 {
-		return errors.New("need both a numerator and denominator specified, slash-delimited (ex. user_id:1/4).")
+		return errors.New("need both a numerator and denominator specified, slash-delimited (ex. user_id:1/4)")
 	}
 
 	var num, den uint64
@@ -41,7 +43,7 @@ func (h *HTTPHeaderHashFilters) Set(value string) error {
 
 	for test := den; test != 1; test /= 2 {
 		if test%2 == 1 {
-			return errors.New("must have a denominator which is a power of two.")
+			return errors.New("must have a denominator which is a power of two")
 		}
 	}
 
@@ -53,6 +55,7 @@ func (h *HTTPHeaderHashFilters) Set(value string) error {
 	return nil
 }
 
+// Good ...
 func (h *HTTPHeaderHashFilters) Good(req *http.Request) bool {
 	for _, f := range *h {
 		if req.Header.Get(f.name) == "" {

@@ -4,13 +4,16 @@ import (
 	"io"
 )
 
+// InOutPlugins ...
 type InOutPlugins struct {
 	Inputs  []io.Reader
 	Outputs []io.Writer
 }
 
+// Plugins ...
 var Plugins *InOutPlugins = new(InOutPlugins)
 
+// InitPlugins ...
 func InitPlugins() {
 	for _, options := range Settings.inputDummy {
 		Plugins.Inputs = append(Plugins.Inputs, NewDummyInput(options))
