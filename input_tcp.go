@@ -72,8 +72,9 @@ func (i *TCPInput) handleConnection(conn net.Conn) {
 				copy(newBuf, buf[:newBufLen])
 				i.data <- newBuf
 				if err != nil {
+					log.Println("tcp connection error: ", err)
 					if err != io.EOF {
-						log.Printf("error: %s\n", err)
+						break
 					}
 				}
 			}

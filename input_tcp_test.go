@@ -23,15 +23,14 @@ func TestTCPInput(t *testing.T) {
 	go Start(quit)
 
 	tcpAddr, err := net.ResolveTCPAddr("tcp", input.listener.Addr().String())
-
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("failed to resolve tcp address", err)
 	}
 
 	conn, err := net.DialTCP("tcp", nil, tcpAddr)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("failed to dial tcp", tcpAddr, err)
 	}
 
 	msg := []byte("GET / HTTP/1.1\r\n\r\n")
