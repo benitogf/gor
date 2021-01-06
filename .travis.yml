@@ -11,5 +11,5 @@ install:
 script:
   - go vet .
   - go test -v -coverprofile cover.out -count 1 -failfast -race
-  - cd raw_socket
+  - cd socket
   - go vet .
