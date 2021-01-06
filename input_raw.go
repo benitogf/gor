@@ -5,7 +5,7 @@ import (
 	"net"
 	"strings"
 
-	raw "github.com/benitogf/gor/raw_socket"
+	raw "github.com/benitogf/gor/socket"
 )
 
 // RAWInput ...

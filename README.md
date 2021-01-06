@@ -1,5 +1,4 @@
-[![Stories in Ready](https://badge.waffle.io/buger/gor.png?label=ready)](https://waffle.io/buger/gor)
-[![Build Status](https://travis-ci.org/buger/gor.png?branch=master)](https://travis-ci.org/buger/gor)
+[![Build Status](https://travis-ci.org/benitogf/gor.png?branch=master)](https://travis-ci.org/benitogf/gor)
 
 ## About
 
@@ -142,27 +141,27 @@ https://github.com/buger/gor/releases
 ```
   -cpuprofile="": write cpu profile to file
   -memprofile="": write memory profile to this file
-  
+
   -input-dummy=[]: Used for testing outputs. Emits 'Get /' request every 1s
 
-  -input-file=[]: Read requests from file: 
+  -input-file=[]: Read requests from file:
     gor --input-file ./requests.gor --output-http staging.com
 
   -input-raw=[]: Capture traffic from given port (use RAW sockets and require *sudo* access):
     # Capture traffic from 8080 port
     gor --input-raw :8080 --output-http staging.com
 
-  -input-tcp=[]: Used for internal communication between Gor instances. Example: 
+  -input-tcp=[]: Used for internal communication between Gor instances. Example:
     # Receive requests from other Gor instances on 28020 port, and redirect output to staging
     gor --input-tcp :28020 --output-http staging.com
 
   -output-dummy=[]: Used for testing inputs. Just prints data coming from inputs.
 
-  -output-file=[]: Write incoming requests to file: 
+  -output-file=[]: Write incoming requests to file:
     gor --input-raw :80 --output-file ./requests.gor
 
   -output-http=[]: Forwards incoming requests to given http address.
-    # Redirect all incoming requests to staging.com address 
+    # Redirect all incoming requests to staging.com address
     gor --input-raw :80 --output-http http://staging.com
 
   -output-http-header=[]: Inject additional headers to http reqest:
@@ -176,11 +175,11 @@ https://github.com/buger/gor/releases
 
   -output-http-url-regexp=: A regexp to match requests against. Anything else will be dropped:
     gor --input-raw :8080 --output-http staging.com --output-http-url-regexp ^www.
-    
-  -output-tcp=[]: Used for internal communication between Gor instances. Example: 
+
+  -output-tcp=[]: Used for internal communication between Gor instances. Example:
     # Listen for requests on 80 port and forward them to other Gor instance on 28020 port
     gor --input-raw :80 --output-tcp replay.local:28020
-    
+
   -split-output=false: By default each output gets same traffic. If set to `true` it splits traffic equally among all outputs.
 ```
 
@@ -195,7 +194,7 @@ Project contains Docker environment
 
 1. Build container: `make dbuild`
 2. Run tests: `make dtest`
-3. Bash access to container: `make dbash`. Inside container you have python to run simple web server `python -m SimpleHTTPServer 8080` and `curl` to make http requests. 
+3. Bash access to container: `make dbash`. Inside container you have python to run simple web server `python -m SimpleHTTPServer 8080` and `curl` to make http requests.
 
 ## FAQ
 
@@ -208,7 +207,7 @@ only by using sudo or root access.
 
 ### I'm getting 'too many open files' error
 Typical linux shell has a small open files soft limit at 1024. You can easily raise that when you do this before starting your gor replay process:
-  
+
   ulimit -n 64000
 
 More about ulimit: http://blog.thecodingmachine.com/content/solving-too-many-open-files-exception-red5-or-any-other-application
