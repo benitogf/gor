@@ -16,12 +16,12 @@ import (
 // Since we can't use default TCP libraries RAWTCPLitener implements own TCP layer
 // TCP packets is parsed using tcp_packet.go, and flow control is managed by tcp_message.go
 type Listener struct {
-	messages map[string]*TCPMessage // buffer of TCPMessages waiting to be send
+	messagesWaiting map[string]*TCPMessage // buffer of TCPMessages waiting to be send
 
-	cPackets  chan *TCPPacket
-	cMessages chan *TCPMessage // Messages ready to be send to client
+	packets       chan *TCPPacket
+	messagesReady chan *TCPMessage // Messages ready to be send to client
 
-	cDelMessage chan *TCPMessage // Used for notifications about completed or expired messages
+	messageDone chan *TCPMessage // Used for notifications about completed or expired messages
 
 	addr string // IP to listen
 	port int    // Port to listen
@@ -32,10 +32,10 @@ type Listener struct {
 func NewListener(addr string, port string) (rawListener *Listener) {
 	rawListener = &Listener{}
 
-	rawListener.cPackets = make(chan *TCPPacket, 100)
-	rawListener.cMessages = make(chan *TCPMessage, 100)
-	rawListener.cDelMessage = make(chan *TCPMessage, 100)
-	rawListener.messages = make(map[string]*TCPMessage)
+	rawListener.packets = make(chan *TCPPacket, 100)
+	rawListener.messagesReady = make(chan *TCPMessage, 100)
+	rawListener.messageDone = make(chan *TCPMessage, 100)
+	rawListener.messagesWaiting = make(map[string]*TCPMessage)
 
 	rawListener.addr = addr
 	rawListener.port, _ = strconv.Atoi(port)
@@ -50,12 +50,12 @@ func (t *Listener) listen() {
 	for {
 		select {
 		// If message ready for deletion it means that its also complete or expired by timeout
-		case message := <-t.cDelMessage:
-			t.cMessages <- message
-			delete(t.messages, message.ID)
+		case message := <-t.messageDone:
+			t.messagesReady <- message
+			delete(t.messagesWaiting, message.ID)
 
 		// We need to use channels to process each packet to avoid data races
-		case packet := <-t.cPackets:
+		case packet := <-t.packets:
 			t.processTCPPacket(packet)
 		}
 	}
@@ -90,7 +90,7 @@ func (t *Listener) parsePacket(addr net.Addr, buf []byte) {
 		newBuf := make([]byte, len(buf))
 		copy(newBuf, buf)
 
-		t.cPackets <- ParseTCPPacket(addr, newBuf)
+		t.packets <- ParseTCPPacket(addr, newBuf)
 	}
 }
 
@@ -124,12 +124,12 @@ func (t *Listener) processTCPPacket(packet *TCPPacket) {
 	var message *TCPMessage
 	messageID := packet.Addr.String() + strconv.Itoa(int(packet.Ack))
 
-	message, ok := t.messages[messageID]
+	message, ok := t.messagesWaiting[messageID]
 
 	if !ok {
 		// We sending c_del_message channel, so message object can communicate with Listener and notify it if message completed
-		message = NewTCPMessage(messageID, t.cDelMessage)
-		t.messages[messageID] = message
+		message = NewTCPMessage(messageID, t.messageDone)
+		t.messagesWaiting[messageID] = message
 	}
 
 	// Adding packet to message
@@ -138,5 +138,5 @@ func (t *Listener) processTCPPacket(packet *TCPPacket) {
 
 // Receive TCP messages from the listener channel
 func (t *Listener) Receive() *TCPMessage {
-	return <-t.cMessages
+	return <-t.messagesReady
 }

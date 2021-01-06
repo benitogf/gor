@@ -23,7 +23,7 @@ type TCPMessage struct {
 
 	cPackets chan *TCPPacket
 
-	cDelMessage chan *TCPMessage
+	messageDone chan *TCPMessage
 }
 
 // NewTCPMessage pointer created from a Acknowledgment number and a channel of messages readuy to be deleted
@@ -31,7 +31,7 @@ func NewTCPMessage(ID string, cDel chan *TCPMessage) (msg *TCPMessage) {
 	msg = &TCPMessage{ID: ID}
 
 	msg.cPackets = make(chan *TCPPacket)
-	msg.cDelMessage = cDel // used for notifying that message completed or expired
+	msg.messageDone = cDel // used for notifying that message completed or expired
 
 	// Every time we receive packet we reset this timer
 	msg.timer = time.AfterFunc(MsgExpiration, msg.Timeout)
@@ -58,7 +58,7 @@ func (t *TCPMessage) listen() {
 // Timeout notifies message to stop listening, close channel and message ready to be sent
 func (t *TCPMessage) Timeout() {
 	close(t.cPackets)  // Notify to stop listen loop and close channel
-	t.cDelMessage <- t // Notify RAWListener that message is ready to be send to replay server
+	t.messageDone <- t // Notify RAWListener that message is ready to be send to replay server
 }
 
 // Bytes sorts packets in right orders and return message content

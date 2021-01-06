@@ -14,7 +14,7 @@ func startHTTP(cb func(*http.Request)) net.Listener {
 		go cb(r)
 	})
 
-	listener, _ := net.Listen("tcp", ":0")
+	listener, _ := net.Listen("tcp4", ":0")
 
 	go http.Serve(listener, handler)
 
