@@ -1,3 +1,6 @@
+v0.8.1 - 5 Jan 2021
+* fix gofmt
+
 v0.7.0 - 31 Oct 2013
 * New modular architecture. Listener and Replay functionality merged.
 * Added option to equally split traffic between multiple outputs: --split-output true
