@@ -10,6 +10,8 @@ install:
 
 script:
   - go vet .
-  - sudo go test -v -coverprofile cover.out -count 1 -failfast -race
+  - GO_EXECUTABLE_PATH=$(which go)
+  - echo $GO_EXECUTABLE_PATH
+  - sudo $GO_EXECUTABLE_PATH test -v -coverprofile cover.out -count 1 -failfast -race
   - cd socket
   - go vet .
