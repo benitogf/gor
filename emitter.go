@@ -1,13 +1,14 @@
 package main
 
 import (
+	"errors"
 	"io"
 )
 
-// Start emmiter
-func Start(stop chan int) {
+// StartEmmiter ...
+func StartEmmiter(stop chan int) {
 	for _, in := range Plugins.Inputs {
-		go CopyMulty(in, Plugins.Outputs...)
+		go Broadcast(in, Plugins.Outputs...)
 	}
 
 	select {
@@ -16,38 +17,43 @@ func Start(stop chan int) {
 	}
 }
 
-// CopyMulty from 1 reader to multiple writers
-func CopyMulty(src io.Reader, writers ...io.Writer) (err error) {
+// Broadcast from 1 reader to multiple writers
+func Broadcast(src io.Reader, writers ...io.Writer) (err error) {
 	buf := make([]byte, 32*1024)
 	wIndex := 0
 
 	for {
 		nr, er := src.Read(buf)
-		if nr > 0 && len(buf) > nr {
-			Debug("Sending", src, ": ", string(buf[0:nr]))
-
-			if Settings.splitOutput {
-				// Simple round robin
-				writers[wIndex].Write(buf[0:nr])
-
-				wIndex++
-
-				if wIndex >= len(writers) {
-					wIndex = 0
-				}
-			} else {
-				for _, dst := range writers {
-					dst.Write(buf[0:nr])
-				}
-			}
-
-		}
 		if er == io.EOF {
 			break
 		}
 		if er != nil {
 			err = er
 			break
+		}
+		if nr == 0 {
+			continue
+		}
+		if len(buf) <= nr {
+			err = errors.New("tcp buffer exceeded")
+			break
+		}
+
+		Debug("Sending", src, ": ", string(buf[0:nr]))
+		if Settings.splitOutput {
+			// Simple round robin
+			writers[wIndex].Write(buf[0:nr])
+
+			wIndex++
+
+			if wIndex >= len(writers) {
+				wIndex = 0
+			}
+			continue
+		}
+
+		for _, dst := range writers {
+			dst.Write(buf[0:nr])
 		}
 	}
 	return err

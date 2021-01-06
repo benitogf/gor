@@ -22,7 +22,7 @@ func TestTCPOutput(t *testing.T) {
 	Plugins.Inputs = []io.Reader{input}
 	Plugins.Outputs = []io.Writer{output}
 
-	go Start(quit)
+	go StartEmmiter(quit)
 
 	for i := 0; i < 100; i++ {
 		wg.Add(1)
@@ -84,7 +84,7 @@ func BenchmarkTCPOutput(b *testing.B) {
 	Plugins.Inputs = []io.Reader{input}
 	Plugins.Outputs = []io.Writer{output}
 
-	go Start(quit)
+	go StartEmmiter(quit)
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {

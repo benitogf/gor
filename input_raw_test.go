@@ -25,7 +25,7 @@ func TestRAWInput(t *testing.T) {
 
 	address := strings.Replace(listener.Addr().String(), "[::]", "127.0.0.1", -1)
 
-	go Start(quit)
+	go StartEmmiter(quit)
 
 	for i := 0; i < 100; i++ {
 		wg.Add(1)

@@ -20,7 +20,7 @@ func TestTCPInput(t *testing.T) {
 	Plugins.Inputs = []io.Reader{input}
 	Plugins.Outputs = []io.Writer{output}
 
-	go Start(quit)
+	go StartEmmiter(quit)
 
 	tcpAddr, err := net.ResolveTCPAddr("tcp4", input.listener.Addr().String())
 	if err != nil {
@@ -60,7 +60,7 @@ func BenchmarkTCPInput(b *testing.B) {
 	Plugins.Inputs = []io.Reader{input}
 	Plugins.Outputs = []io.Writer{output}
 
-	go Start(quit)
+	go StartEmmiter(quit)
 
 	tcpAddr, err := net.ResolveTCPAddr("tcp", input.listener.Addr().String())
 

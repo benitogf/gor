@@ -16,7 +16,7 @@ func TestFileOutput(t *testing.T) {
 	Plugins.Inputs = []io.Reader{input}
 	Plugins.Outputs = []io.Writer{output}
 
-	go Start(quit)
+	go StartEmmiter(quit)
 
 	for i := 0; i < 100; i++ {
 		wg.Add(2)
@@ -35,7 +35,7 @@ func TestFileOutput(t *testing.T) {
 	Plugins.Inputs = []io.Reader{input2}
 	Plugins.Outputs = []io.Writer{output2}
 
-	go Start(quit)
+	go StartEmmiter(quit)
 
 	wg.Wait()
 	close(quit)

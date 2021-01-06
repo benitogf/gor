@@ -19,7 +19,7 @@ func TestLimiter(t *testing.T) {
 	Plugins.Inputs = []io.Reader{input}
 	Plugins.Outputs = []io.Writer{output}
 
-	go Start(quit)
+	go StartEmmiter(quit)
 
 	for i := 0; i < 100; i++ {
 		input.EmitGET()

@@ -45,7 +45,7 @@ func main() {
 		profileCPU(*cpuprofile)
 	}
 
-	Start(nil)
+	StartEmmiter(nil)
 }
 
 func profileCPU(cpuprofile string) {
