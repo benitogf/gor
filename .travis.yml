@@ -10,6 +10,6 @@ install:
 
 script:
   - go vet .
-  - go test -v -coverprofile cover.out -count 1 -failfast -race
+  - sudo go test -v -coverprofile cover.out -count 1 -failfast -race
   - cd socket
   - go vet .

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/benitogf/gor.png?branch=master)](https://travis-ci.org/benitogf/gor)
+[![Build Status](https://travis-ci.com/benitogf/gor.png?branch=master)](https://travis-ci.com/benitogf/gor)
 
 ## About
 
